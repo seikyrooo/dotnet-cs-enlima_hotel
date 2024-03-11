@@ -1,0 +1,495 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="db_enlimahotelModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="tbl_hotel">
+          <Key>
+            <PropertyRef Name="hotel_id" />
+          </Key>
+          <Property Name="hotel_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nama_hotel" Type="nvarchar" MaxLength="50" />
+          <Property Name="alamat" Type="text" />
+          <Property Name="nomor_telepon" Type="nvarchar" MaxLength="20" />
+          <Property Name="logo_hotel" Type="varbinary(max)" />
+          <Property Name="kapasitas_kamar" Type="int" />
+        </EntityType>
+        <EntityType Name="tbl_kamar">
+          <Key>
+            <PropertyRef Name="kamar_id" />
+          </Key>
+          <Property Name="kamar_id" Type="int" Nullable="false" />
+          <Property Name="jenis_kamar" Type="nvarchar" MaxLength="50" />
+          <Property Name="tarif_kamar" Type="int" />
+          <Property Name="foto_kamar" Type="varbinary(max)" />
+          <Property Name="tersedia" Type="date" />
+          <Property Name="extra_bed" Type="bit" />
+        </EntityType>
+        <EntityType Name="tbl_pelanggan">
+          <Key>
+            <PropertyRef Name="pelanggan_id" />
+          </Key>
+          <Property Name="pelanggan_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nama" Type="nvarchar" MaxLength="100" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" />
+          <Property Name="nomor_telepon" Type="nvarchar" MaxLength="20" />
+          <Property Name="jenis_identitas" Type="nvarchar" MaxLength="50" />
+          <Property Name="no_identitas" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="tbl_pelayanan">
+          <Key>
+            <PropertyRef Name="pelayanan_id" />
+          </Key>
+          <Property Name="pelayanan_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nama_pelayanan" Type="nvarchar" MaxLength="50" />
+          <Property Name="harga_pelayanan" Type="int" />
+          <Property Name="kategori" Type="nvarchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="tbl_pesanan">
+          <Key>
+            <PropertyRef Name="pesanan_id" />
+          </Key>
+          <Property Name="pesanan_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="reservasi_id" Type="nvarchar" MaxLength="10" />
+          <Property Name="pelayanan_id" Type="int" />
+          <Property Name="harga" Type="int" />
+        </EntityType>
+        <EntityType Name="tbl_reservasi">
+          <Key>
+            <PropertyRef Name="reservasi_id" />
+          </Key>
+          <Property Name="reservasi_id" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="user_id" Type="int" />
+          <Property Name="pelanggan_id" Type="int" />
+          <Property Name="kamar_id" Type="int" />
+          <Property Name="status" Type="nvarchar" MaxLength="50" />
+          <Property Name="tanggal_checkin" Type="date" />
+          <Property Name="tanggal_checkout" Type="date" />
+          <Property Name="jumlah_tamu" Type="int" />
+          <Property Name="sarapan" Type="bit" />
+          <Property Name="extra_bed" Type="bit" />
+          <Property Name="total_bayar" Type="int" />
+        </EntityType>
+        <EntityType Name="tbl_user">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="photo" Type="varbinary(max)" />
+          <Property Name="name" Type="nvarchar" MaxLength="30" />
+          <Property Name="role" Type="nvarchar" MaxLength="30" />
+          <Property Name="phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" />
+          <Property Name="active" Type="bit" />
+        </EntityType>
+        <Association Name="FK_tbl_pesanan_tbl_reservasi">
+          <End Role="tbl_reservasi" Type="Self.tbl_reservasi" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tbl_pesanan" Type="Self.tbl_pesanan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_reservasi">
+              <PropertyRef Name="reservasi_id" />
+            </Principal>
+            <Dependent Role="tbl_pesanan">
+              <PropertyRef Name="reservasi_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_reservasi_tbl_kamar">
+          <End Role="tbl_kamar" Type="Self.tbl_kamar" Multiplicity="0..1" />
+          <End Role="tbl_reservasi" Type="Self.tbl_reservasi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_kamar">
+              <PropertyRef Name="kamar_id" />
+            </Principal>
+            <Dependent Role="tbl_reservasi">
+              <PropertyRef Name="kamar_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_reservasi_tbl_pelanggan">
+          <End Role="tbl_pelanggan" Type="Self.tbl_pelanggan" Multiplicity="0..1" />
+          <End Role="tbl_reservasi" Type="Self.tbl_reservasi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_pelanggan">
+              <PropertyRef Name="pelanggan_id" />
+            </Principal>
+            <Dependent Role="tbl_reservasi">
+              <PropertyRef Name="pelanggan_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_reservasi_tbl_user">
+          <End Role="tbl_user" Type="Self.tbl_user" Multiplicity="0..1" />
+          <End Role="tbl_reservasi" Type="Self.tbl_reservasi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="tbl_reservasi">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="db_enlimahotelModelStoreContainer">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_hotel" EntityType="Self.tbl_hotel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_kamar" EntityType="Self.tbl_kamar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_pelanggan" EntityType="Self.tbl_pelanggan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_pelayanan" EntityType="Self.tbl_pelayanan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_pesanan" EntityType="Self.tbl_pesanan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_reservasi" EntityType="Self.tbl_reservasi" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_user" EntityType="Self.tbl_user" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tbl_pesanan_tbl_reservasi" Association="Self.FK_tbl_pesanan_tbl_reservasi">
+            <End Role="tbl_reservasi" EntitySet="tbl_reservasi" />
+            <End Role="tbl_pesanan" EntitySet="tbl_pesanan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_reservasi_tbl_kamar" Association="Self.FK_tbl_reservasi_tbl_kamar">
+            <End Role="tbl_kamar" EntitySet="tbl_kamar" />
+            <End Role="tbl_reservasi" EntitySet="tbl_reservasi" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_reservasi_tbl_pelanggan" Association="Self.FK_tbl_reservasi_tbl_pelanggan">
+            <End Role="tbl_pelanggan" EntitySet="tbl_pelanggan" />
+            <End Role="tbl_reservasi" EntitySet="tbl_reservasi" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_reservasi_tbl_user" Association="Self.FK_tbl_reservasi_tbl_user">
+            <End Role="tbl_user" EntitySet="tbl_user" />
+            <End Role="tbl_reservasi" EntitySet="tbl_reservasi" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="db_enlimahotelModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="tbl_hotel">
+          <Key>
+            <PropertyRef Name="hotel_id" />
+          </Key>
+          <Property Name="hotel_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nama_hotel" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="alamat" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="nomor_telepon" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="logo_hotel" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="kapasitas_kamar" Type="Int32" />
+        </EntityType>
+        <EntityType Name="tbl_kamar">
+          <Key>
+            <PropertyRef Name="kamar_id" />
+          </Key>
+          <Property Name="kamar_id" Type="Int32" Nullable="false" />
+          <Property Name="jenis_kamar" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="tarif_kamar" Type="Int32" />
+          <Property Name="foto_kamar" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="tersedia" Type="DateTime" Precision="0" />
+          <Property Name="extra_bed" Type="Boolean" />
+          <NavigationProperty Name="tbl_reservasi" Relationship="Self.FK_tbl_reservasi_tbl_kamar" FromRole="tbl_kamar" ToRole="tbl_reservasi" />
+        </EntityType>
+        <EntityType Name="tbl_pelanggan">
+          <Key>
+            <PropertyRef Name="pelanggan_id" />
+          </Key>
+          <Property Name="pelanggan_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nama" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="nomor_telepon" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="jenis_identitas" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="no_identitas" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tbl_reservasi" Relationship="Self.FK_tbl_reservasi_tbl_pelanggan" FromRole="tbl_pelanggan" ToRole="tbl_reservasi" />
+        </EntityType>
+        <EntityType Name="tbl_pelayanan">
+          <Key>
+            <PropertyRef Name="pelayanan_id" />
+          </Key>
+          <Property Name="pelayanan_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nama_pelayanan" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="harga_pelayanan" Type="Int32" />
+          <Property Name="kategori" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tbl_pesanan">
+          <Key>
+            <PropertyRef Name="pesanan_id" />
+          </Key>
+          <Property Name="pesanan_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="reservasi_id" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="pelayanan_id" Type="Int32" />
+          <Property Name="harga" Type="Int32" />
+          <NavigationProperty Name="tbl_reservasi" Relationship="Self.FK_tbl_pesanan_tbl_reservasi" FromRole="tbl_pesanan" ToRole="tbl_reservasi" />
+        </EntityType>
+        <EntityType Name="tbl_reservasi">
+          <Key>
+            <PropertyRef Name="reservasi_id" />
+          </Key>
+          <Property Name="reservasi_id" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="user_id" Type="Int32" />
+          <Property Name="pelanggan_id" Type="Int32" />
+          <Property Name="kamar_id" Type="Int32" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="tanggal_checkin" Type="DateTime" Precision="0" />
+          <Property Name="tanggal_checkout" Type="DateTime" Precision="0" />
+          <Property Name="jumlah_tamu" Type="Int32" />
+          <Property Name="sarapan" Type="Boolean" />
+          <Property Name="extra_bed" Type="Boolean" />
+          <Property Name="total_bayar" Type="Int32" />
+          <NavigationProperty Name="tbl_kamar" Relationship="Self.FK_tbl_reservasi_tbl_kamar" FromRole="tbl_reservasi" ToRole="tbl_kamar" />
+          <NavigationProperty Name="tbl_pelanggan" Relationship="Self.FK_tbl_reservasi_tbl_pelanggan" FromRole="tbl_reservasi" ToRole="tbl_pelanggan" />
+          <NavigationProperty Name="tbl_pesanan" Relationship="Self.FK_tbl_pesanan_tbl_reservasi" FromRole="tbl_reservasi" ToRole="tbl_pesanan" />
+          <NavigationProperty Name="tbl_user" Relationship="Self.FK_tbl_reservasi_tbl_user" FromRole="tbl_reservasi" ToRole="tbl_user" />
+        </EntityType>
+        <EntityType Name="tbl_user">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="photo" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="name" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="role" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="active" Type="Boolean" />
+          <NavigationProperty Name="tbl_reservasi" Relationship="Self.FK_tbl_reservasi_tbl_user" FromRole="tbl_user" ToRole="tbl_reservasi" />
+        </EntityType>
+        <Association Name="FK_tbl_reservasi_tbl_kamar">
+          <End Role="tbl_kamar" Type="Self.tbl_kamar" Multiplicity="0..1" />
+          <End Role="tbl_reservasi" Type="Self.tbl_reservasi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_kamar">
+              <PropertyRef Name="kamar_id" />
+            </Principal>
+            <Dependent Role="tbl_reservasi">
+              <PropertyRef Name="kamar_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_reservasi_tbl_pelanggan">
+          <End Role="tbl_pelanggan" Type="Self.tbl_pelanggan" Multiplicity="0..1" />
+          <End Role="tbl_reservasi" Type="Self.tbl_reservasi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_pelanggan">
+              <PropertyRef Name="pelanggan_id" />
+            </Principal>
+            <Dependent Role="tbl_reservasi">
+              <PropertyRef Name="pelanggan_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_pesanan_tbl_reservasi">
+          <End Role="tbl_reservasi" Type="Self.tbl_reservasi" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tbl_pesanan" Type="Self.tbl_pesanan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_reservasi">
+              <PropertyRef Name="reservasi_id" />
+            </Principal>
+            <Dependent Role="tbl_pesanan">
+              <PropertyRef Name="reservasi_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_reservasi_tbl_user">
+          <End Role="tbl_user" Type="Self.tbl_user" Multiplicity="0..1" />
+          <End Role="tbl_reservasi" Type="Self.tbl_reservasi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_user">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="tbl_reservasi">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="db_enlimahotelEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="tbl_hotel" EntityType="Self.tbl_hotel" />
+          <EntitySet Name="tbl_kamar" EntityType="Self.tbl_kamar" />
+          <EntitySet Name="tbl_pelanggan" EntityType="Self.tbl_pelanggan" />
+          <EntitySet Name="tbl_pelayanan" EntityType="Self.tbl_pelayanan" />
+          <EntitySet Name="tbl_pesanan" EntityType="Self.tbl_pesanan" />
+          <EntitySet Name="tbl_reservasi" EntityType="Self.tbl_reservasi" />
+          <EntitySet Name="tbl_user" EntityType="Self.tbl_user" />
+          <AssociationSet Name="FK_tbl_reservasi_tbl_kamar" Association="Self.FK_tbl_reservasi_tbl_kamar">
+            <End Role="tbl_kamar" EntitySet="tbl_kamar" />
+            <End Role="tbl_reservasi" EntitySet="tbl_reservasi" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_reservasi_tbl_pelanggan" Association="Self.FK_tbl_reservasi_tbl_pelanggan">
+            <End Role="tbl_pelanggan" EntitySet="tbl_pelanggan" />
+            <End Role="tbl_reservasi" EntitySet="tbl_reservasi" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_pesanan_tbl_reservasi" Association="Self.FK_tbl_pesanan_tbl_reservasi">
+            <End Role="tbl_reservasi" EntitySet="tbl_reservasi" />
+            <End Role="tbl_pesanan" EntitySet="tbl_pesanan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_reservasi_tbl_user" Association="Self.FK_tbl_reservasi_tbl_user">
+            <End Role="tbl_user" EntitySet="tbl_user" />
+            <End Role="tbl_reservasi" EntitySet="tbl_reservasi" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="db_enlimahotelModelStoreContainer" CdmEntityContainer="db_enlimahotelEntities">
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="db_enlimahotelModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_hotel">
+            <EntityTypeMapping TypeName="db_enlimahotelModel.tbl_hotel">
+              <MappingFragment StoreEntitySet="tbl_hotel">
+                <ScalarProperty Name="hotel_id" ColumnName="hotel_id" />
+                <ScalarProperty Name="nama_hotel" ColumnName="nama_hotel" />
+                <ScalarProperty Name="alamat" ColumnName="alamat" />
+                <ScalarProperty Name="nomor_telepon" ColumnName="nomor_telepon" />
+                <ScalarProperty Name="logo_hotel" ColumnName="logo_hotel" />
+                <ScalarProperty Name="kapasitas_kamar" ColumnName="kapasitas_kamar" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_kamar">
+            <EntityTypeMapping TypeName="db_enlimahotelModel.tbl_kamar">
+              <MappingFragment StoreEntitySet="tbl_kamar">
+                <ScalarProperty Name="kamar_id" ColumnName="kamar_id" />
+                <ScalarProperty Name="jenis_kamar" ColumnName="jenis_kamar" />
+                <ScalarProperty Name="tarif_kamar" ColumnName="tarif_kamar" />
+                <ScalarProperty Name="foto_kamar" ColumnName="foto_kamar" />
+                <ScalarProperty Name="tersedia" ColumnName="tersedia" />
+                <ScalarProperty Name="extra_bed" ColumnName="extra_bed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_pelanggan">
+            <EntityTypeMapping TypeName="db_enlimahotelModel.tbl_pelanggan">
+              <MappingFragment StoreEntitySet="tbl_pelanggan">
+                <ScalarProperty Name="pelanggan_id" ColumnName="pelanggan_id" />
+                <ScalarProperty Name="nama" ColumnName="nama" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="nomor_telepon" ColumnName="nomor_telepon" />
+                <ScalarProperty Name="jenis_identitas" ColumnName="jenis_identitas" />
+                <ScalarProperty Name="no_identitas" ColumnName="no_identitas" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_pelayanan">
+            <EntityTypeMapping TypeName="db_enlimahotelModel.tbl_pelayanan">
+              <MappingFragment StoreEntitySet="tbl_pelayanan">
+                <ScalarProperty Name="pelayanan_id" ColumnName="pelayanan_id" />
+                <ScalarProperty Name="nama_pelayanan" ColumnName="nama_pelayanan" />
+                <ScalarProperty Name="harga_pelayanan" ColumnName="harga_pelayanan" />
+                <ScalarProperty Name="kategori" ColumnName="kategori" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_pesanan">
+            <EntityTypeMapping TypeName="db_enlimahotelModel.tbl_pesanan">
+              <MappingFragment StoreEntitySet="tbl_pesanan">
+                <ScalarProperty Name="pesanan_id" ColumnName="pesanan_id" />
+                <ScalarProperty Name="reservasi_id" ColumnName="reservasi_id" />
+                <ScalarProperty Name="pelayanan_id" ColumnName="pelayanan_id" />
+                <ScalarProperty Name="harga" ColumnName="harga" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_reservasi">
+            <EntityTypeMapping TypeName="db_enlimahotelModel.tbl_reservasi">
+              <MappingFragment StoreEntitySet="tbl_reservasi">
+                <ScalarProperty Name="reservasi_id" ColumnName="reservasi_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="pelanggan_id" ColumnName="pelanggan_id" />
+                <ScalarProperty Name="kamar_id" ColumnName="kamar_id" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="tanggal_checkin" ColumnName="tanggal_checkin" />
+                <ScalarProperty Name="tanggal_checkout" ColumnName="tanggal_checkout" />
+                <ScalarProperty Name="jumlah_tamu" ColumnName="jumlah_tamu" />
+                <ScalarProperty Name="sarapan" ColumnName="sarapan" />
+                <ScalarProperty Name="extra_bed" ColumnName="extra_bed" />
+                <ScalarProperty Name="total_bayar" ColumnName="total_bayar" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_user">
+            <EntityTypeMapping TypeName="db_enlimahotelModel.tbl_user">
+              <MappingFragment StoreEntitySet="tbl_user">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="photo" ColumnName="photo" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="active" ColumnName="active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram DiagramId="827dac78d0494423ba2085481712636c" Name="Diagram1">
+        <EntityTypeShape EntityType="db_enlimahotelModel.sysdiagram" Width="1.5" PointX="2.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_enlimahotelModel.tbl_hotel" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_enlimahotelModel.tbl_kamar" Width="1.5" PointX="0.75" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_enlimahotelModel.tbl_pelanggan" Width="1.5" PointX="0.75" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_enlimahotelModel.tbl_pelayanan" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_enlimahotelModel.tbl_pesanan" Width="1.5" PointX="5.25" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_enlimahotelModel.tbl_reservasi" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_enlimahotelModel.tbl_user" Width="1.5" PointX="0.75" PointY="9.25" IsExpanded="true" />
+        <AssociationConnector Association="db_enlimahotelModel.FK_tbl_reservasi_tbl_kamar" ManuallyRouted="false" />
+        <AssociationConnector Association="db_enlimahotelModel.FK_tbl_reservasi_tbl_pelanggan" ManuallyRouted="false" />
+        <AssociationConnector Association="db_enlimahotelModel.FK_tbl_pesanan_tbl_reservasi" ManuallyRouted="false" />
+        <AssociationConnector Association="db_enlimahotelModel.FK_tbl_reservasi_tbl_user" ManuallyRouted="false" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

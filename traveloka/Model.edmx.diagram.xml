@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="eca82a20c1854fa2a36efc725a1e1775" Name="Diagram1">
+        <EntityTypeShape EntityType="db_enlimahotelModel.sysdiagram" Width="1.5" PointX="2.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_enlimahotelModel.tbl_hotel" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_enlimahotelModel.tbl_kamar" Width="1.5" PointX="0.75" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_enlimahotelModel.tbl_pelanggan" Width="1.5" PointX="0.75" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_enlimahotelModel.tbl_pelayanan" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_enlimahotelModel.tbl_pesanan" Width="1.5" PointX="5.25" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_enlimahotelModel.tbl_reservasi" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_enlimahotelModel.tbl_user" Width="1.5" PointX="0.75" PointY="9.25" IsExpanded="true" />
+        <AssociationConnector Association="db_enlimahotelModel.FK_tbl_reservasi_tbl_kamar" ManuallyRouted="false" />
+        <AssociationConnector Association="db_enlimahotelModel.FK_tbl_reservasi_tbl_pelanggan" ManuallyRouted="false" />
+        <AssociationConnector Association="db_enlimahotelModel.FK_tbl_pesanan_tbl_reservasi" ManuallyRouted="false" />
+        <AssociationConnector Association="db_enlimahotelModel.FK_tbl_reservasi_tbl_user" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
